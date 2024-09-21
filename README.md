@@ -52,8 +52,9 @@ To run the Wiki GIF application using Docker, follow these steps:
 
 3. **Access the application** at [http://localhost:3000](http://localhost:3000).
 
-## Demo
-![Demo GIF](media/demo.mp4)
+## Screenshots 📸
+![Search](media/search.png)
+![Result](media/result.png)
 
 ## Project final purpose 🔍
 Utilize this app to test the following CI pipeline tools:
