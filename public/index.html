@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wiki GIF</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/heroicons@1.0.6/dist/outline.min.js"></script>
+    <style>
+        body {
+            background: url('https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExZmg0d2NnMWJlODVsN3RpdW54ZjA5ajJneHJkMDVqN3hvNHNkdnBsbSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3ohhwNqFMnb7wZgNnq/giphy.gif') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 4rem;
+            font-weight: 900; 
+            background: linear-gradient(270deg, magenta, black, magenta);
+            background-size: 400% 400%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: colorChange 5s linear infinite;
+            cursor: pointer; 
+        }
+
+        @keyframes colorChange {
+            0% { background-position: 0%; }
+            50% { background-position: 100%; }
+            100% { background-position: 0%; }
+        }
+
+        .animated-button {
+            background: linear-gradient(270deg, magenta, black, magenta);
+            background-size: 400% 400%;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            border-radius: 0.5rem;
+            animation: colorChange 5s linear infinite;
+            transition: transform 0.1s;
+        }
+
+        .animated-button:hover {
+            cursor: pointer;
+        }
+
+        .pressed {
+            transform: scale(0.95);
+            transition: transform 0.1s;
+        }
+
+        .input-search {
+            font-family: 'Orbitron', sans-serif;
+            color: black; /* Cambiar el color del texto a negro */
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen">
+    <div class="bg-white shadow-md rounded-lg p-6 max-w-4xl w-full">
+        <h1 class="mb-4 text-center" onclick="resetSearch()">Wiki GIF</h1>
+        <div class="flex">
+            <input type="text" id="search" placeholder="Find GIFs..." class="flex-1 p-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500 input-search">
+            <button id="search-btn" class="animated-button">Search</button>
+        </div>
+        <div id="gif-container" class="mt-4 grid grid-cols-3 gap-4"></div>
+        <div id="copy-message" class="mt-4 hidden text-green-500 fixed inset-0 flex items-center justify-center">
+            <div class="bg-white p-4 rounded-lg shadow-lg flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+                <span>URL copied!</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const searchInput = document.getElementById('search');
+        const searchButton = document.getElementById('search-btn');
+        
+        const fetchGifs = async () => {
+            const searchTerm = searchInput.value;
+            const response = await fetch(`/api/gifs?search=${searchTerm}`);
+            const gifs = await response.json();
+
+            const gifContainer = document.getElementById('gif-container');
+            gifContainer.innerHTML = '';
+            gifs.forEach(gif => {
+                const img = document.createElement('img');
+                img.src = gif.images.fixed_height.url;
+                img.className = 'gif rounded-lg shadow-lg cursor-pointer';
+                img.dataset.url = gif.url;
+
+                img.addEventListener('click', () => {
+                    navigator.clipboard.writeText(gif.url).then(() => {
+                        const copyMessage = document.getElementById('copy-message');
+                        copyMessage.classList.remove('hidden');
+                        setTimeout(() => {
+                            copyMessage.classList.add('hidden');
+                        }, 3000);
+                    });
+                });
+
+                gifContainer.appendChild(img);
+            });
+        };
+
+        searchButton.addEventListener('click', () => {
+            fetchGifs();
+            searchButton.classList.add('pressed');
+            setTimeout(() => searchButton.classList.remove('pressed'), 100);
+        });
+
+        searchInput.addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') {
+                fetchGifs();
+                searchButton.classList.add('pressed');
+                setTimeout(() => searchButton.classList.remove('pressed'), 100);
+            }
+        });
+
+        function resetSearch() {
+            const gifContainer = document.getElementById('gif-container');
+            gifContainer.innerHTML = ''; // Limpia los GIFs actuales
+            searchInput.value = ''; // Limpia el campo de búsqueda
+            searchInput.focus(); // Enfoca el campo de búsqueda
+        }
+    </script>
+</body>
+</html>
