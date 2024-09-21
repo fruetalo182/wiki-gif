@@ -1,8 +1,8 @@
-# Wiki GIF 🎨
+# Wiki GIF 👾
 
 Wiki GIF is a simple gifs finder application using the Giphy API, built with a lightweight frontend and an Express.js backend. It allows users to search for gifs and copy their URL to the clipboard with a single click. 
 
-## Tech Stack & Requirements 🛠️
+**Stack**:
 
 - **Frontend**: HTML5, CSS3 (TailwindCSS), JavaScript (Vanilla).
 - **Backend**: Node.js, Express.js, Axios (for Giphy API requests).
@@ -10,9 +10,8 @@ Wiki GIF is a simple gifs finder application using the Giphy API, built with a l
 - **Utilities**: dotenv for managing environment variables.
 
 **Requirements**:
-1. Node.js (v14 or higher).
-2. Giphy API Key (obtain from [Giphy Developers](https://developers.giphy.com/)).
-3. Tailwind CSS (included via CDN).
+- Node.js (v14 or higher).
+- Giphy API Key (obtain from [Giphy Developers](https://developers.giphy.com/)).
 
 ## Setup ⚙️
 
