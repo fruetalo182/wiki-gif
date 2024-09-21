@@ -10,12 +10,12 @@ const fetchGifs = async () => {
     gifContainer.innerHTML = '';
     gifs.forEach(gif => {
         const img = document.createElement('img');
-        img.src = gif.images.fixed_height.url;
+        img.src = gif.images.fixed_height.url; // URL del GIF
         img.className = 'gif rounded-lg shadow-lg cursor-pointer';
-        img.dataset.url = gif.url;
+        img.dataset.url = gif.images.fixed_height.url; // Guarda la URL del GIF
 
         img.addEventListener('click', () => {
-            navigator.clipboard.writeText(gif.url).then(() => {
+            navigator.clipboard.writeText(gif.images.fixed_height.url).then(() => { // Copia la URL del GIF
                 const copyMessage = document.getElementById('copy-message');
                 copyMessage.classList.remove('hidden');
                 setTimeout(() => {
