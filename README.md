@@ -13,7 +13,7 @@ Wiki GIF is a simple gif finder application using the Giphy API, built with a li
 - Node.js (v14 or higher).
 - Giphy API Key (obtain from [Giphy Developers](https://developers.giphy.com/)).
 
-## Setup ⚙️
+## Local setup ⚙️
 
 1. Clone this repository:
     ```bash
@@ -34,3 +34,27 @@ Wiki GIF is a simple gif finder application using the Giphy API, built with a li
     ```
 5. Open your browser at [http://localhost:3000](http://localhost:3000) to use the app.
 
+## Docker setup 🐳
+
+To run the Wiki GIF application using Docker, follow these steps:
+
+1. **Build the Docker image**:
+
+    ```bash
+    docker pull fruetalo182/wiki-gif:latest
+    ```
+
+2. **Run the Docker container**:
+
+    ```bash
+    docker run -p 3000:3000 wiki-gif
+    ```
+
+3. **Access the application** at [http://localhost:3000](http://localhost:3000).
+
+## Project final purpose 🔍
+Utilize this app to test the following CI pipeline tools:
+- Github Actions
+- Jenkins
+- CircleCI
+- TravisCI
