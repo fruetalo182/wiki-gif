@@ -1,0 +1,51 @@
+body {
+    background: url('https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExZmg0d2NnMWJlODVsN3RpdW54ZjA5ajJneHJkMDVqN3hvNHNkdnBsbSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3ohhwNqFMnb7wZgNnq/giphy.gif') no-repeat center center fixed;
+    background-size: cover;
+}
+
+h1 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 4rem;
+    font-weight: 900; 
+    background: linear-gradient(270deg, magenta, black, magenta);
+    background-size: 400% 400%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: colorChange 5s linear infinite;
+    cursor: pointer; 
+}
+
+@keyframes colorChange {
+    0% { background-position: 0%; }
+    50% { background-position: 100%; }
+    100% { background-position: 0%; }
+}
+
+.animated-button {
+    background: linear-gradient(270deg, magenta, black, magenta);
+    background-size: 400% 400%;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    border-radius: 0.5rem;
+    animation: colorChange 5s linear infinite;
+    transition: transform 0.1s;
+}
+
+.animated-button:hover {
+    cursor: pointer;
+}
+
+.pressed {
+    transform: scale(0.95);
+    transition: transform 0.1s;
+}
+
+.input-search {
+    font-family: 'Orbitron', sans-serif;
+    color: black;
+}
