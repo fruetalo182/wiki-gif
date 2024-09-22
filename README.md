@@ -60,13 +60,10 @@ To run the Wiki GIF application using Docker, follow these steps:
 ![Search](media/search.png)
 ![Result](media/result.png)
 
-## Project final purpose 🔍
-Utilize this app to test the following CI pipeline tools:
+## CI/CD integrations 🔄
 - Github Actions
 - Jenkins
-- CircleCI
-- TravisCI
 
-and multiple container Registry:
-- Github Packages
-- Docker Hub
+## Container Registry 🏷️
+- [Github Packages](https://github.com/users/fruetalo182/packages/container/package/wiki-gif)
+- [Docker Hub](https://hub.docker.com/r/fruetalo/wiki-gif)
