@@ -66,6 +66,7 @@ Utilize this app to test the following CI pipeline tools:
 - Jenkins
 - CircleCI
 - TravisCI
+
 and multiple container Registry:
 - Github Packages
 - Docker Hub
