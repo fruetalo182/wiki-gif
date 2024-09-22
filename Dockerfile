@@ -13,7 +13,7 @@ RUN chown -R $USER:$USER $APP_HOME
 
 USER $USER
 
-RUN npm ci
+RUN npm install
 
 ENV PATH="/home/$USER/.local/bin:${PATH}"
 
