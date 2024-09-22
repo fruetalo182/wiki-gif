@@ -38,7 +38,7 @@ Wiki GIF is a simple gif finder application using the Giphy API, built with a li
 
 To run the Wiki GIF application using Docker, follow these steps:
 
-1. **Build the Docker image**:
+1. **Pull the Docker image**:
 
     ```bash
     docker pull fruetalo182/wiki-gif:latest
