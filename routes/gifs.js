@@ -10,7 +10,7 @@ router.get('/gifs', async (req, res) => {
             params: {
                 api_key: process.env.GIPHY_API_KEY,
                 q: search,
-                limit: 20
+                limit: 21
             }
         });
 
