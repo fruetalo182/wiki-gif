@@ -41,10 +41,9 @@ To run the Wiki GIF application using Docker, follow these steps:
 1. **Pull the Docker image**:
 
     ```bash
-    docker pull fruetalo182/wiki-gif:latest
+    docker pull fruetalo/wiki-gif:latest
     ```
     Or
-
     ```bash
     docker pull ghcr.io/fruetalo182/wiki-gif:latest
     ```

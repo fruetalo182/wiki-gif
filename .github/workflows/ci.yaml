@@ -33,3 +33,16 @@ jobs:
           # Push both tags to the registry
           docker push ghcr.io/fruetalo182/wiki-gif:${{ github.sha }}
           docker push ghcr.io/fruetalo182/wiki-gif:latest
+
+      - name: Build and push Docker image - Docker Hub
+        run: |
+          docker build --build-arg USER=wiki-gif --build-arg GIPHY_API_KEY=${{ secrets.GIPHY_API_KEY }} -t wiki-gif:${{ github.sha }} .
+          echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login -u fruetalo --password-stdin
+          
+          # Tag the image with both the commit SHA and "latest"
+          docker tag wiki-gif:${{ github.sha }} fruetalo/wiki-gif:${{ github.sha }}
+          docker tag wiki-gif:${{ github.sha }} fruetalo/wiki-gif:latest
+
+          # Push both tags to the registry
+          docker push fruetalo/wiki-gif:${{ github.sha }}
+          docker push fruetalo/wiki-gif:latest
