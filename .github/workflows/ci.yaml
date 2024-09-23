@@ -21,68 +21,31 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Get and Increment Version
-        id: versioning
-        run: |
-          # Si el archivo VERSION no existe, crear uno
-          if [ ! -f VERSION ]; then
-            echo "0.1.0" > VERSION
-          fi
-
-          # Leer la versión actual
-          current_version=$(cat VERSION)
-          echo "Current version: $current_version"
-
-          # Separar en partes major, minor, patch
-          IFS='.' read -r major minor patch <<< "$current_version"
-          
-          # Incrementar el patch
-          new_patch=$((patch + 1))
-          new_version="$major.$minor.$new_patch"
-          echo "New version: $new_version"
-
-          # Guardar la nueva versión en el archivo VERSION
-          echo $new_version > VERSION
-
-          # Exportar la nueva versión como un output para usar en los siguientes pasos
-          echo "::set-output name=version::$new_version"
-
       - name: Build and push Docker image - Github Packages
         run: |
           docker build --build-arg USER=wiki-gif --build-arg GIPHY_API_KEY=${{ secrets.GIPHY_API_KEY }} -t wiki-gif:${{ github.sha }} .
           echo "${{ secrets.GH_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
           
-          # Tag the image with commit SHA, "latest" and semver
-          docker tag wiki-gif:${{ github.sha }} ghcr.io/fruetalo182/wiki-gif:${{ github.sha }}
+          # Tag the image with both the commit SHA and "latest"
           docker tag wiki-gif:${{ github.sha }} ghcr.io/fruetalo182/wiki-gif:latest
-          docker tag wiki-gif:${{ github.sha }} ghcr.io/fruetalo182/wiki-gif:${{ steps.versioning.outputs.version }}
+          docker tag wiki-gif:${{ github.sha }} ghcr.io/fruetalo182/wiki-gif:${{ github.sha }}
 
-          # Push all tags to the registry
-          docker push ghcr.io/fruetalo182/wiki-gif:${{ github.sha }}
+
+          # Push both tags to the registry
           docker push ghcr.io/fruetalo182/wiki-gif:latest
-          docker push ghcr.io/fruetalo182/wiki-gif:${{ steps.versioning.outputs.version }}
+          docker push ghcr.io/fruetalo182/wiki-gif:${{ github.sha }}
+
 
       - name: Build and push Docker image - Docker Hub
         run: |
           docker build --build-arg USER=wiki-gif --build-arg GIPHY_API_KEY=${{ secrets.GIPHY_API_KEY }} -t wiki-gif:${{ github.sha }} .
           echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login -u fruetalo --password-stdin
           
-          # Tag the image with commit SHA, "latest" and semver
-          docker tag wiki-gif:${{ github.sha }} fruetalo/wiki-gif:${{ github.sha }}
+          # Tag the image with both the commit SHA and "latest"
           docker tag wiki-gif:${{ github.sha }} fruetalo/wiki-gif:latest
-          docker tag wiki-gif:${{ github.sha }} fruetalo/wiki-gif:${{ steps.versioning.outputs.version }}
+          docker tag wiki-gif:${{ github.sha }} fruetalo/wiki-gif:${{ github.sha }}
 
-          # Push all tags to the registry
-          docker push fruetalo/wiki-gif:${{ github.sha }}
+
+          # Push both tags to the registry
           docker push fruetalo/wiki-gif:latest
-          docker push fruetalo/wiki-gif:${{ steps.versioning.outputs.version }}
-
-      - name: Commit and push updated version
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: |
-          git config --local user.name "GitHub Actions"
-          git config --local user.email "actions@github.com"
-          git add VERSION
-          git commit -m "Increment version to ${{ steps.versioning.outputs.version }}"
-          git push https://${{ secrets.GH_TOKEN }}@github.com/fruetalo182/wiki-gif.git
+          docker push fruetalo/wiki-gif:${{ github.sha }}
