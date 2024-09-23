@@ -5,6 +5,9 @@ on:
     branches:
       - main
 
+permissions:
+  contents: write      
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -78,8 +81,6 @@ jobs:
           docker push fruetalo/wiki-gif:${{ steps.versioning.outputs.version }}
 
       - name: Commit and push updated version
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config --local user.name "GitHub Actions"
           git config --local user.email "actions@github.com"
