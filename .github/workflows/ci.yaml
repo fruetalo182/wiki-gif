@@ -78,9 +78,11 @@ jobs:
           docker push fruetalo/wiki-gif:${{ steps.versioning.outputs.version }}
 
       - name: Commit and push updated version
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           git config --local user.name "GitHub Actions"
           git config --local user.email "actions@github.com"
           git add VERSION
           git commit -m "Increment version to ${{ steps.versioning.outputs.version }}"
-          git push https://fruetalo182:${{ secrets.GH_TOKEN }}@github.com/fruetalo182/wiki-gif.git
+          git push https://fruetalo182:${{ secrets.GH_TOKEN }}@github.com/fruetalo182/wiki-gif.git HEAD:main
