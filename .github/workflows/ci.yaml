@@ -83,4 +83,4 @@ jobs:
           git config --local user.email "actions@github.com"
           git add VERSION
           git commit -m "Increment version to ${{ steps.versioning.outputs.version }}"
-          git push https://${{ secrets.GH_TOKEN }}@github.com/fruetalo182/wiki-gif.git
+          git push https://fruetalo182:${{ secrets.GH_TOKEN }}@github.com/fruetalo182/wiki-gif.git
