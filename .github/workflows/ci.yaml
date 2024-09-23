@@ -27,27 +27,27 @@ jobs:
       - name: Get and Increment Version
         id: versioning
         run: |
-          # Si el archivo VERSION no existe, crear uno
+          # If the VERSION file does not exist, create one
           if [ ! -f VERSION ]; then
             echo "0.1.0" > VERSION
           fi
 
-          # Leer la versión actual
+          # Read the current version
           current_version=$(cat VERSION)
           echo "Current version: $current_version"
 
-          # Separar en partes major, minor, patch
+          # Split into major, minor, patch parts
           IFS='.' read -r major minor patch <<< "$current_version"
           
-          # Incrementar el patch
+          # Increment the patch
           new_patch=$((patch + 1))
-          new_version="$major.$minor.$new_patch"
+          new_version="v$major.$minor.$new_patch"
           echo "New version: $new_version"
 
-          # Guardar la nueva versión en el archivo VERSION
+          # Save the new version in the VERSION file
           echo $new_version > VERSION
 
-          # Exportar la nueva versión como un output para usar en los siguientes pasos
+          # Export the new version as an output for use in subsequent steps
           echo "::set-output name=version::$new_version"
 
       - name: Build and push Docker image - Github Packages
@@ -57,7 +57,7 @@ jobs:
           
           # Tag the image with commit SHA, "latest" and semver
           docker tag wiki-gif:${{ github.sha }} ghcr.io/fruetalo182/wiki-gif:${{ github.sha }}
-          docker tag wiki-gif:${{ github.sha }} ghcr.io/fruetalo182/wiki-gif:latest
+          docker tag wiki-gig:${{ github.sha }} ghcr.io/fruetalo182/wiki-gif:latest
           docker tag wiki-gif:${{ github.sha }} ghcr.io/fruetalo182/wiki-gif:${{ steps.versioning.outputs.version }}
 
           # Push all tags to the registry
