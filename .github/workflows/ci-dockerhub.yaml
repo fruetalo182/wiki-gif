@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   build:
-    uses: fruetalo182/github-workflows-templates/.github/workflows/npm-autoversioning-dockerhub.yaml@main
+    uses: fruetalo182/github-workflows-templates/.github/workflows/npm-dockerhub.yaml@main
     with:
       node-version: '14'
       docker-hub-image-name: 'wiki-gif'
