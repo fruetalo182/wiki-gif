@@ -11,7 +11,7 @@ Wiki GIF is a simple gif finder application using the Giphy API, built with a li
 
 **Requirements**:
 - Node.js (v14 or higher).
-- Giphy API Key (From [Giphy Developers](https://developers.giphy.com/)).
+- Giphy API Key (from [Giphy Developers](https://developers.giphy.com/)).
 
 ## Local setup ⚙️
 
