@@ -17,6 +17,5 @@ jobs:
       docker-hub-username: 'fruetalo'
       docker-build-args: |
         USER=wiki-gif
-        GIPHY_API_KEY=${{ secrets.GIPHY_API_KEY }}
     secrets:
       GIPHY_API_KEY: ${{ secrets.GIPHY_API_KEY }}
