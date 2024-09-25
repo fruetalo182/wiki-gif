@@ -1,6 +1,6 @@
 {
   "name": "wiki-gif",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Simple GIF finder",
   "main": "server.js",
   "scripts": {
