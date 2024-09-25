@@ -10,12 +10,12 @@ const fetchGifs = async () => {
     gifContainer.innerHTML = '';
     gifs.forEach(gif => {
         const img = document.createElement('img');
-        img.src = gif.images.fixed_height.url; // GIF URL
+        img.src = gif.images.fixed_height.url; // gif url
         img.className = 'gif rounded-lg shadow-lg cursor-pointer';
-        img.dataset.url = gif.images.fixed_height.url; // Save GIF URL
+        img.dataset.url = gif.images.fixed_height.url; // Save gif url
 
         img.addEventListener('click', () => {
-            navigator.clipboard.writeText(gif.images.fixed_height.url).then(() => { // Copy GIF URL
+            navigator.clipboard.writeText(gif.images.fixed_height.url).then(() => { // Copy gif url
                 const copyMessage = document.getElementById('copy-message');
                 copyMessage.classList.remove('hidden');
                 setTimeout(() => {
@@ -44,7 +44,7 @@ searchInput.addEventListener('keypress', (event) => {
 
 function resetSearch() {
     const gifContainer = document.getElementById('gif-container');
-    gifContainer.innerHTML = ''; // Clear current GIFs
+    gifContainer.innerHTML = ''; // Clear current gifs
     searchInput.value = ''; // Clear input text
     searchInput.focus(); // Focus input text
 }
