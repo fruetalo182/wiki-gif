@@ -66,5 +66,4 @@ To run the Wiki GIF application using Docker, follow these steps:
 
 ## CI/CD integrations 🔄
 - Github Actions
-- Jenkins
 
