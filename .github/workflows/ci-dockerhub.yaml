@@ -10,22 +10,11 @@ permissions:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Run template workflow - NPM + Docker Hub
-        uses: fruetalo182/github-workflows-templates/.github/workflows/npm-autoversioning-dockerhub.yaml@main
-        with:
-          node-version: '14'
-          docker-hub-image-name: 'wiki-gif'
-          docker-hub-username: 'fruetalo'
-          docker-build-args: |
-            USER=wiki-gif
-            GIPHY_API_KEY=${{ secrets.GIPHY_API_KEY }}
-
-      - name: Commit and Push Updated Version
-        run: |
-          git config --local user.name "GitHub Actions"
-          git config --local user.email "actions@github.com"
-          git add VERSION
-          git commit -m "Increment version to ${{ steps.versioning.outputs.version }}"
-          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/fruetalo182/wiki-gif.git HEAD:main
+    uses: fruetalo182/github-workflows-templates/.github/workflows/npm-dockerhub.yaml@main
+    with:
+      node-version: '14'
+      docker-hub-image-name: 'wiki-gif'
+      docker-hub-username: 'fruetalo'
+      docker-build-args: |
+        USER=wiki-gif
+        GIPHY_API_KEY=${{ secrets.GIPHY_API_KEY }}
