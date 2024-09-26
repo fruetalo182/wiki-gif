@@ -19,7 +19,6 @@ jobs:
       pull-requests: read
     uses: fruetalo182/github-workflows-templates/.github/workflows/npm-linter.yaml@main
     secrets: inherit
-    if: github.event_name == 'pull_request'
 
   build-push-images:
     needs: execute-lint
