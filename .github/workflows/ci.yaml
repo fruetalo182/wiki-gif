@@ -8,12 +8,14 @@ on:
     branches:
       - main
       
-permissions:
+permissions: # Global
   contents: write
+  packages: write
+  pull-requests: read
 
 jobs:
   execute-lint:
-    permissions:
+    permissions: # Only for this job
       contents: read
       statuses: write
       pull-requests: read
@@ -32,6 +34,16 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '14'
+
+      - name: Cache node modules
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.npm
+            node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
       - name: Install dependencies
         run: npm install
