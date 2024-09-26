@@ -15,8 +15,8 @@ jobs:
       statuses: write
       pull-requests: write
     uses: fruetalo182/github-workflows-templates/.github/workflows/npm-linter.yaml@main
-    secrets:
-      GITHUB_TOKEN: ${{ github.token }}
+    secrets: inherit
+      ##GITHUB_TOKEN: ${{ github.token }}
 
   build-push-images:
     needs: execute-lint
