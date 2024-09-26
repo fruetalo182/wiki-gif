@@ -11,12 +11,12 @@ permissions:
 jobs:
   execute-lint:
     permissions:
-      contents: write
+      contents: read
       statuses: write
       pull-requests: write
     uses: fruetalo182/github-workflows-templates/.github/workflows/npm-linter.yaml@main
     secrets:
-      token: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_TOKEN: ${{ github.token }}
 
   build-push-images:
     needs: execute-lint
