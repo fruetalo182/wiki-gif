@@ -9,7 +9,7 @@ on:
       - main
       
 permissions: # Global
-  contents: write
+  contents: read
   packages: write
   pull-requests: read
 
@@ -24,6 +24,8 @@ jobs:
 
   build-push-images:
     needs: execute-lint
+    permissions:
+      packages: write
     runs-on: ubuntu-latest
 
     steps:
