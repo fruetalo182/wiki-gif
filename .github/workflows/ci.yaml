@@ -11,8 +11,6 @@ permissions:
 jobs:
   execute-lint:
     uses: fruetalo182/github-workflows-templates/.github/workflows/npm-linter.yaml@main
-    secrets:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
   build:
     runs-on: ubuntu-latest
 
