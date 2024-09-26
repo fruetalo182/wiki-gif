@@ -7,7 +7,6 @@ on:
 
 permissions:
   contents: write
-  statuses: write
 
 jobs:
   execute-lint:
@@ -15,7 +14,9 @@ jobs:
       contents: read
       statuses: write
     uses: fruetalo182/github-workflows-templates/.github/workflows/npm-linter.yaml@main
+
   build-push-images:
+    needs: execute-lint
     runs-on: ubuntu-latest
 
     steps:
