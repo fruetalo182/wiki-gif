@@ -11,7 +11,7 @@ permissions:
 jobs:
   execute-lint:
     permissions:
-      contents: read
+      contents: write
       statuses: write
       pull-requests: write
     uses: fruetalo182/github-workflows-templates/.github/workflows/npm-linter.yaml@main
