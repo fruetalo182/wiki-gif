@@ -1,4 +1,5 @@
 # Wiki GIF 👾
+[![CI Status](https://github.com/fruetalo182/wiki-gif/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/fruetalo182/wiki-gif/actions/workflows/ci.yaml)
 
 Wiki GIF is a simple gif finder application using the Giphy API, built with a lightweight frontend and an Express.js backend. It allows users to search for gifs and copy their URL to the clipboard with a single click. 
 
