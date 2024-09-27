@@ -3,7 +3,6 @@ Wiki GIF is a simple gif finder application using the Giphy API, built with a li
 
 [![CI Status](https://img.shields.io/github/actions/workflow/status/fruetalo182/wiki-gif/ci.yaml?branch=main&label=CI%20Status)](https://github.com/fruetalo182/wiki-gif/actions/workflows/ci.yaml)
 
-## ⚡️ Stack
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat&logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat&logo=css3&logoColor=white)
 ![TailwindCSS](https://img.shields.io/badge/TailwindCSS-06B6D4?style=flat&logo=tailwindcss&logoColor=white)
@@ -16,11 +15,11 @@ Wiki GIF is a simple gif finder application using the Giphy API, built with a li
 
 ## 📋 Requirements
 
-- **Node version:** (14 or higher)
-- **Giphy API Key** (from [Giphy Developers](https://developers.giphy.com/))
+- **Node version:** 14 or higher
+- **Giphy API Key (Only for local setup):** Generate it from [Giphy Developers](https://developers.giphy.com/)
 
 
-## Local setup ⚙️
+## ⚙️ Local setup
 
 1. Clone this repository:
     ```bash
@@ -41,7 +40,7 @@ Wiki GIF is a simple gif finder application using the Giphy API, built with a li
     ```
 5. Open your browser at [http://localhost:3000](http://localhost:3000) to use the app.
 
-## Docker setup 🐳
+## 🐳 Docker setup
 
 To run the Wiki GIF application using Docker, follow these steps:
 
@@ -63,11 +62,11 @@ To run the Wiki GIF application using Docker, follow these steps:
 
 3. **Access the application** at [http://localhost:3000](http://localhost:3000).
 
-## Container Registry 🏷️
+## 🏷️ Container Registry
 - [Github Packages](https://github.com/users/fruetalo182/packages/container/package/wiki-gif)
 - [Docker Hub](https://hub.docker.com/r/fruetalo/wiki-gif)
 
-## Screenshots 📸
+## 📸 Screenshots
 ![Search](media/search.png)
 ![Result](media/result.png)
 
