@@ -24,6 +24,7 @@ jobs:
     needs: execute-lint
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
+    timeout-minutes: 5
 
     steps:
       - name: Checkout code
