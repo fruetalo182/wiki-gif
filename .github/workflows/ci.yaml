@@ -17,7 +17,7 @@ jobs:
       contents: read
       statuses: write
       pull-requests: read
-    uses: fruetalo182/github-workflows-templates/.github/workflows/npm-linter.yaml@main
+    uses: fruetalo182/github-workflows-templates/.github/workflows/linter-npm.yaml@main
     secrets: inherit
 
   build-push-images:
