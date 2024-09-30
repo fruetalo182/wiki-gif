@@ -72,7 +72,7 @@ To run the Wiki GIF application using Docker, follow these steps:
 
 ## 🏷️ Container Registry
 - [Github Packages](https://github.com/users/fruetalo182/packages/container/package/wiki-gif)
-- [Docker Hub](https://hub.docker.com/r/fruetalo/wiki-gif)
+- [Docker Hub](https://hub.docker.com/r/fruetalo/wiki-gif/tags)
 
 ## 📸 Screenshots
 ![Search](media/search.png)
