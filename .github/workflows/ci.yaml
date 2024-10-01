@@ -20,6 +20,11 @@ jobs:
     uses: fruetalo182/github-workflows-templates/.github/workflows/linter-npm.yaml@main
     secrets: inherit
 
+  versioning: Call reusable versioning workflow
+    needs: execute-lint
+    uses: fruetalo182/github-workflows-templates/.github/workflows/version-autoupdate-patch.yaml@main
+
+    
   build-push-images:
     needs: execute-lint
     runs-on: ubuntu-latest
@@ -37,10 +42,6 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-
-      - name: Call reusable versioning workflow
-        uses: fruetalo182/github-workflows-templates/.github/workflows/version-autoupdate-patch.yaml@main
-        id: version
 
       - name: Build and push Docker image - Github Packages
         run: |
