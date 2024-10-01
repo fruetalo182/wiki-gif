@@ -50,12 +50,12 @@ jobs:
           # Tag the image with commit SHA, "latest" and semver
           docker tag wiki-gif:${{ github.sha }} ghcr.io/fruetalo182/wiki-gif:${{ github.sha }}
           docker tag wiki-gif:${{ github.sha }} ghcr.io/fruetalo182/wiki-gif:latest
-          docker tag wiki-gif:${{ github.sha }} ghcr.io/fruetalo182/wiki-gif:${{ steps.versioning.outputs.version }}
+          docker tag wiki-gif:${{ github.sha }} ghcr.io/fruetalo182/wiki-gif:${{ needs.versioning.outputs.version }}
 
           # Push all tags to the registry
           docker push ghcr.io/fruetalo182/wiki-gif:${{ github.sha }}
           docker push ghcr.io/fruetalo182/wiki-gif:latest
-          docker push ghcr.io/fruetalo182/wiki-gif:${{ steps.versioning.outputs.version }}
+          docker push ghcr.io/fruetalo182/wiki-gif:${{ needs.versioning.outputs.version }}
 
       - name: Build and push Docker image - Docker Hub
         run: |
