@@ -63,7 +63,7 @@ jobs:
           docker push ghcr.io/fruetalo182/wiki-gif:latest
           docker push ghcr.io/fruetalo182/wiki-gif:${{ needs.versioning.outputs.version }}
 
-      - name: Build and push Docker image - Docker Hub
+      - name: Build Docker image - Docker Hub
         run: |
           docker build --build-arg USER=wiki-gif --build-arg GIPHY_API_KEY=${{ secrets.GIPHY_API_KEY }} -t wiki-gif:${{ github.sha }} .
           echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login -u fruetalo --password-stdin
@@ -72,7 +72,19 @@ jobs:
           docker tag wiki-gif:${{ github.sha }} fruetalo/wiki-gif:${{ github.sha }}
           docker tag wiki-gif:${{ github.sha }} fruetalo/wiki-gif:latest
           docker tag wiki-gif:${{ github.sha }} fruetalo/wiki-gif:${{ needs.versioning.outputs.version }}
+     
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@0.20.0
+        with:
+          image-ref: 'fruetalo/wiki-gif:${{ needs.versioning.outputs.version }}'
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'
 
+      - name: Push Docker image - Docker Hub
+        run: |  
           # Push all tags to the registry
           docker push fruetalo/wiki-gif:${{ github.sha }}
           docker push fruetalo/wiki-gif:latest
