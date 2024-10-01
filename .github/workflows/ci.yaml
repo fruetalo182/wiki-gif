@@ -12,11 +12,7 @@ permissions:
   contents: write
 
 jobs:
-  versioning:
-    uses: fruetalo182/github-workflows-templates/.github/workflows/version-autoupdate-patch.yaml@main
-
   execute-lint:
-    needs: versioning
     permissions:
       contents: read
       statuses: write
@@ -24,8 +20,9 @@ jobs:
     uses: fruetalo182/github-workflows-templates/.github/workflows/linter-npm.yaml@main
     secrets: inherit
 
-  build-push-images:
-    needs: [versioning, execute-lint]
+  # GHCR
+  build-push-image-ghcr:
+    needs: execute-lint
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
     timeout-minutes: 5
@@ -44,25 +41,19 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Debug version
-        run: |
-          echo "Needs output: ${{ needs.versioning.outputs.version }}"
-
-      # GHCR    
       - name: Build and push Docker image - Github Packages
         run: |
           docker build --build-arg USER=wiki-gif --build-arg GIPHY_API_KEY=${{ secrets.GIPHY_API_KEY }} -t wiki-gif:${{ github.sha }} .
           echo "${{ secrets.GH_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
           
-          # Tag the image with commit SHA, "latest" and semver
+          # Tag the image with commit SHA and "latest"
           docker tag wiki-gif:${{ github.sha }} ghcr.io/fruetalo182/wiki-gif:${{ github.sha }}
           docker tag wiki-gif:${{ github.sha }} ghcr.io/fruetalo182/wiki-gif:latest
-          docker tag wiki-gif:${{ github.sha }} ghcr.io/fruetalo182/wiki-gif:${{ needs.versioning.outputs.version }}
 
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@0.20.0
         with:
-          image-ref: 'fruetalo/wiki-gif:${{ needs.versioning.outputs.version }}'
+          image-ref: 'ghcr.io/fruetalo182/wiki-gif:latest'
           format: 'table'
           exit-code: '1'
           ignore-unfixed: true
@@ -74,9 +65,34 @@ jobs:
           # Push all tags to the registry
           docker push ghcr.io/fruetalo182/wiki-gif:${{ github.sha }}
           docker push ghcr.io/fruetalo182/wiki-gif:latest
-          docker push ghcr.io/fruetalo182/wiki-gif:${{ needs.versioning.outputs.version }}
 
-      # DOCKER HUB          
+  versioning-ghcr:
+    uses: fruetalo182/github-workflows-templates/.github/workflows/version-autoupdate-patch.yaml@main
+        
+  ghcr-image-tag-semver-push:
+    needs: versioning-ghcr
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    timeout-minutes: 5
+    
+    steps:
+      - name: Debug version GHCR
+        run: |
+          echo "Needs output: ${{ needs.versioning-ghcr.outputs.version }}"
+
+      - name: Tag and Push semver image - Github Packages
+        run: |
+          docker tag wiki-gif:${{ github.sha }} ghcr.io/fruetalo182/wiki-gif:${{ needs.versioning-ghcr.outputs.version }}
+          docker push ghcr.io/fruetalo182/wiki-gif:${{ needs.versioning-ghcr.outputs.version }}
+
+  # DOCKER HUB  
+  build-push-image-docker-hub:
+    needs: execute-lint
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    timeout-minutes: 5
+    
+    steps:        
       - name: Build Docker image - Docker Hub
         run: |
           docker build --build-arg USER=wiki-gif --build-arg GIPHY_API_KEY=${{ secrets.GIPHY_API_KEY }} -t wiki-gif:${{ github.sha }} .
@@ -85,12 +101,11 @@ jobs:
           # Tag the image with commit SHA, "latest" and semver
           docker tag wiki-gif:${{ github.sha }} fruetalo/wiki-gif:${{ github.sha }}
           docker tag wiki-gif:${{ github.sha }} fruetalo/wiki-gif:latest
-          docker tag wiki-gif:${{ github.sha }} fruetalo/wiki-gif:${{ needs.versioning.outputs.version }}
      
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@0.20.0
         with:
-          image-ref: 'fruetalo/wiki-gif:${{ needs.versioning.outputs.version }}'
+          image-ref: 'fruetalo/wiki-gif:latest'
           format: 'table'
           exit-code: '1'
           ignore-unfixed: true
@@ -102,4 +117,23 @@ jobs:
           # Push all tags to the registry
           docker push fruetalo/wiki-gif:${{ github.sha }}
           docker push fruetalo/wiki-gif:latest
-          docker push fruetalo/wiki-gif:${{ needs.versioning.outputs.version }}
+
+  versioning-docker-hub:
+    uses: fruetalo182/github-workflows-templates/.github/workflows/version-autoupdate-patch.yaml@main
+    
+
+  docker-hub-image-tag-semver-push:
+    needs: versioning-docker-hub
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    timeout-minutes: 5
+    
+    steps:
+      - name: Debug version GHCR
+        run: |
+          echo "Needs output: ${{ needs.versioning-docker-hub.outputs.version }}"
+
+      - name: Tag and Push semver image - Docker Hub
+        run: |
+          docker tag wiki-gif:${{ github.sha }} fruetalo/wiki-gif:${{ needs.versioning-docker-hub.outputs.version }}
+          docker push fruetalo/wiki-gif:${{ needs.versioning-docker-hub.outputs.version }}
