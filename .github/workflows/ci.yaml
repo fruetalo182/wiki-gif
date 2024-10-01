@@ -39,14 +39,14 @@ jobs:
           fetch-depth: 0
 
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
 
       - name: Install dependencies
         run: npm install
 
-      - name: Build and push Docker image - Github Packages
+      - name: GHCR - Build and Tag Docker image
         run: |
           docker build --build-arg USER=wiki-gif --build-arg GIPHY_API_KEY=${{ secrets.GIPHY_API_KEY }} -t wiki-gif:${{ github.sha }} .
           echo "${{ secrets.GH_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
@@ -56,7 +56,7 @@ jobs:
           docker tag wiki-gif:${{ github.sha }} ghcr.io/fruetalo182/wiki-gif:latest
           docker tag wiki-gif:${{ github.sha }} ghcr.io/fruetalo182/wiki-gif:v${{ env.MAJOR_V }}.${{ env.MINOR_V }}.${{ env.PATCH_V }}-${{ github.run_number }}
 
-      - name: Run Trivy vulnerability scanner
+      - name: GHCR - Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@0.20.0
         with:
           image-ref: 'ghcr.io/fruetalo182/wiki-gif:v${{ env.MAJOR_V }}.${{ env.MINOR_V }}.${{ env.PATCH_V }}-${{ github.run_number }}'
@@ -66,7 +66,7 @@ jobs:
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
           
-      - name: Push Docker image - Github Packages
+      - name: GHCR - Push Docker image
         run: |  
           docker push ghcr.io/fruetalo182/wiki-gif:${{ github.sha }}
           docker push ghcr.io/fruetalo182/wiki-gif:latest
@@ -86,11 +86,11 @@ jobs:
           fetch-depth: 0
 
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
 
-      - name: Build Docker image - Docker Hub
+      - name: Docker Hub - Build and Tag Docker image
         run: |
           docker build --build-arg USER=wiki-gif --build-arg GIPHY_API_KEY=${{ secrets.GIPHY_API_KEY }} -t wiki-gif:${{ github.sha }} .
           echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login -u fruetalo --password-stdin
@@ -100,7 +100,7 @@ jobs:
           docker tag wiki-gif:${{ github.sha }} fruetalo/wiki-gif:latest
           docker tag wiki-gif:${{ github.sha }} fruetalo/wiki-gif:v${{ env.MAJOR_V }}.${{ env.MINOR_V }}.${{ env.PATCH_V }}-${{ github.run_number }}
      
-      - name: Run Trivy vulnerability scanner
+      - name: Docker Hub - Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@0.20.0
         with:
           image-ref: 'fruetalo/wiki-gif:v${{ env.MAJOR_V }}.${{ env.MINOR_V }}.${{ env.PATCH_V }}-${{ github.run_number }}'
@@ -110,7 +110,7 @@ jobs:
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
 
-      - name: Push Docker image - Docker Hub
+      - name: Docker Hub - Push Docker image
         run: |  
           # Push all tags to the registry
           docker push fruetalo/wiki-gif:${{ github.sha }}
