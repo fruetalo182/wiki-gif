@@ -67,10 +67,11 @@ jobs:
           docker push ghcr.io/fruetalo182/wiki-gif:latest
 
   versioning-ghcr:
+    needs: build-push-image-ghcr
     uses: fruetalo182/github-workflows-templates/.github/workflows/version-autoupdate-patch.yaml@main
         
   ghcr-image-tag-semver-push:
-    needs: versioning-ghcr
+    needs: [build-push-image-ghcr, versioning-ghcr]
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
     timeout-minutes: 5
@@ -119,11 +120,12 @@ jobs:
           docker push fruetalo/wiki-gif:latest
 
   versioning-docker-hub:
+    needs: build-push-image-docker-hub
     uses: fruetalo182/github-workflows-templates/.github/workflows/version-autoupdate-patch.yaml@main
     
 
   docker-hub-image-tag-semver-push:
-    needs: versioning-docker-hub
+    needs: [build-push-image-docker-hub, versioning-docker-hub]
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
     timeout-minutes: 5
