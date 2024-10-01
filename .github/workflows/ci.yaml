@@ -14,10 +14,8 @@ permissions:
 jobs:
 
   versioning:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Call reusable versioning workflow
-        uses: fruetalo182/github-workflows-templates/.github/workflows/version-autoupdate-patch.yaml@main
+    uses: fruetalo182/github-workflows-templates/.github/workflows/version-autoupdate-patch.yaml@main
+    id: version
 
   execute-lint:
     permissions:
