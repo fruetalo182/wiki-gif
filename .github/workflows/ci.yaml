@@ -42,6 +42,9 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Debug version
+        run: "echo Version: ${{ needs.versioning.outputs.version }}"
+
       - name: Build and push Docker image - Github Packages
         run: |
           docker build --build-arg USER=wiki-gif --build-arg GIPHY_API_KEY=${{ secrets.GIPHY_API_KEY }} -t wiki-gif:${{ github.sha }} .
