@@ -83,7 +83,10 @@ jobs:
 
       - name: Tag and Push semver image - Github Packages
         run: |
-          docker tag wiki-gif:latest ghcr.io/fruetalo182/wiki-gif:${{ needs.versioning-ghcr.outputs.version }}
+          docker build --build-arg USER=wiki-gif --build-arg GIPHY_API_KEY=${{ secrets.GIPHY_API_KEY }} -t wiki-gif:${{ github.sha }} .
+          echo "${{ secrets.GH_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+          docker tag wiki-gif:${{ github.sha }} ghcr.io/fruetalo182/wiki-gif:${{ needs.versioning-ghcr.outputs.version }}
           docker push ghcr.io/fruetalo182/wiki-gif:${{ needs.versioning-ghcr.outputs.version }}
 
   # DOCKER HUB  
