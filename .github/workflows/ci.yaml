@@ -25,7 +25,7 @@ jobs:
     secrets: inherit
 
   build-push-images:
-    needs: execute-lint
+    needs: [versioning, execute-lint]
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
     timeout-minutes: 5
@@ -44,9 +44,7 @@ jobs:
 
       - name: Debug version
         run: |
-          echo "${{ steps.versioning.outputs.version }}"
-          echo "${{ job.versioning.outputs.version }}"
-          echo "${{ needs.versioning.outputs.version }}"
+          echo "Needs output: ${{ needs.versioning.outputs.version }}"
 
       - name: Build and push Docker image - Github Packages
         run: |
@@ -71,18 +69,17 @@ jobs:
           # Tag the image with commit SHA, "latest" and semver
           docker tag wiki-gif:${{ github.sha }} fruetalo/wiki-gif:${{ github.sha }}
           docker tag wiki-gif:${{ github.sha }} fruetalo/wiki-gif:latest
-          docker tag wiki-gif:${{ github.sha }} fruetalo/wiki-gif:${{ job.versioning.outputs.version }}
+          docker tag wiki-gif:${{ github.sha }} fruetalo/wiki-gif:${{ needs.versioning.outputs.version }}
 
           # Push all tags to the registry
           docker push fruetalo/wiki-gif:${{ github.sha }}
           docker push fruetalo/wiki-gif:latest
-          docker push fruetalo/wiki-gif:${{ job.versioning.outputs.version }}
+          docker push fruetalo/wiki-gif:${{ needs.versioning.outputs.version }}
 
       - name: Commit and push updated version
         run: |
           git config --local user.name "GitHub Actions"
           git config --local user.email "actions@github.com"
           git add VERSION
-          git commit -m "Increment version to ${{ job.versioning.outputs.version }}"
+          git commit -m "Increment version to ${{ needs.versioning.outputs.version }}"
           git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/fruetalo182/wiki-gif.git HEAD:main
-
