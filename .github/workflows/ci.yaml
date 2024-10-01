@@ -8,6 +8,11 @@ on:
     branches:
       - main
 
+env:
+  MAJOR_V: 0
+  MINOR_V: 0
+  PATCH_V: 1
+
 permissions:
   contents: write
 
@@ -21,7 +26,7 @@ jobs:
     secrets: inherit
 
   # GHCR
-  build-push-image-ghcr:
+  build-push-ghcr:
     needs: execute-lint
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
@@ -49,11 +54,12 @@ jobs:
           # Tag the image with commit SHA and "latest"
           docker tag wiki-gif:${{ github.sha }} ghcr.io/fruetalo182/wiki-gif:${{ github.sha }}
           docker tag wiki-gif:${{ github.sha }} ghcr.io/fruetalo182/wiki-gif:latest
+          docker tag wiki-gif:${{ github.sha }} ghcr.io/fruetalo182/wiki-gif:v${{ env.MAJOR_V }}.${{ env.MINOR_V }}.${{ env.PATCH_V }}-${{ github.run_number }}
 
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@0.20.0
         with:
-          image-ref: 'ghcr.io/fruetalo182/wiki-gif:latest'
+          image-ref: 'ghcr.io/fruetalo182/wiki-gif:v${{ env.MAJOR_V }}.${{ env.MINOR_V }}.${{ env.PATCH_V }}-${{ github.run_number }}'
           format: 'table'
           exit-code: '1'
           ignore-unfixed: true
@@ -62,45 +68,12 @@ jobs:
           
       - name: Push Docker image - Github Packages
         run: |  
-          # Push all tags to the registry
           docker push ghcr.io/fruetalo182/wiki-gif:${{ github.sha }}
           docker push ghcr.io/fruetalo182/wiki-gif:latest
-
-  versioning-ghcr:
-    needs: build-push-image-ghcr
-    uses: fruetalo182/github-workflows-templates/.github/workflows/version-autoupdate-patch.yaml@main
-        
-  ghcr-image-tag-semver-push:
-    needs: [build-push-image-ghcr, versioning-ghcr]
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push'
-    timeout-minutes: 5
-    
-    steps:
-      - name: Debug version GHCR
-        run: |
-          echo "Needs output: ${{ needs.versioning-ghcr.outputs.version }}"
-
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20'
-          
-      - name: Tag and Push semver image - Github Packages
-        run: |
-          docker build --build-arg USER=wiki-gif --build-arg GIPHY_API_KEY=${{ secrets.GIPHY_API_KEY }} -t wiki-gif:${{ github.sha }} .
-          echo "${{ secrets.GH_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-
-          docker tag wiki-gif:${{ github.sha }} ghcr.io/fruetalo182/wiki-gif:${{ needs.versioning-ghcr.outputs.version }}
-          docker push ghcr.io/fruetalo182/wiki-gif:${{ needs.versioning-ghcr.outputs.version }}
+          docker push ghcr.io/fruetalo182/wiki-gif:v${{ env.MAJOR_V }}.${{ env.MINOR_V }}.${{ env.PATCH_V }}-${{ github.run_number }}
 
   # DOCKER HUB  
-  build-push-image-docker-hub:
+  build-push-docker-hub:
     needs: execute-lint
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
@@ -116,20 +89,21 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '20'
-          
+
       - name: Build Docker image - Docker Hub
         run: |
           docker build --build-arg USER=wiki-gif --build-arg GIPHY_API_KEY=${{ secrets.GIPHY_API_KEY }} -t wiki-gif:${{ github.sha }} .
           echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login -u fruetalo --password-stdin
           
-          # Tag the image with commit SHA, "latest" and semver
+          # Tag the image with commit SHA and "latest"
           docker tag wiki-gif:${{ github.sha }} fruetalo/wiki-gif:${{ github.sha }}
           docker tag wiki-gif:${{ github.sha }} fruetalo/wiki-gif:latest
+          docker tag wiki-gif:${{ github.sha }} fruetalo/wiki-gif:v${{ env.MAJOR_V }}.${{ env.MINOR_V }}.${{ env.PATCH_V }}-${{ github.run_number }}
      
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@0.20.0
         with:
-          image-ref: 'fruetalo/wiki-gif:latest'
+          image-ref: 'fruetalo/wiki-gif:v${{ env.MAJOR_V }}.${{ env.MINOR_V }}.${{ env.PATCH_V }}-${{ github.run_number }}'
           format: 'table'
           exit-code: '1'
           ignore-unfixed: true
@@ -141,24 +115,4 @@ jobs:
           # Push all tags to the registry
           docker push fruetalo/wiki-gif:${{ github.sha }}
           docker push fruetalo/wiki-gif:latest
-
-  versioning-docker-hub:
-    needs: build-push-image-docker-hub
-    uses: fruetalo182/github-workflows-templates/.github/workflows/version-autoupdate-patch.yaml@main
-    
-
-  docker-hub-image-tag-semver-push:
-    needs: [build-push-image-docker-hub, versioning-docker-hub]
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push'
-    timeout-minutes: 5
-    
-    steps:
-      - name: Debug version GHCR
-        run: |
-          echo "Needs output: ${{ needs.versioning-docker-hub.outputs.version }}"
-
-      - name: Tag and Push semver image - Docker Hub
-        run: |
-          docker tag wiki-gif:${{ github.sha }} fruetalo/wiki-gif:${{ needs.versioning-docker-hub.outputs.version }}
-          docker push fruetalo/wiki-gif:${{ needs.versioning-docker-hub.outputs.version }}
+          docker push fruetalo/wiki-gif:v${{ env.MAJOR_V }}.${{ env.MINOR_V }}.${{ env.PATCH_V }}-${{ github.run_number }}
