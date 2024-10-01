@@ -78,10 +78,10 @@ jobs:
           docker push fruetalo/wiki-gif:latest
           docker push fruetalo/wiki-gif:${{ needs.versioning.outputs.version }}
 
-      - name: Commit and push updated version
-        run: |
-          git config --local user.name "GitHub Actions"
-          git config --local user.email "actions@github.com"
-          git add VERSION
-          git commit -m "Increment version to ${{ needs.versioning.outputs.version }}"
-          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/fruetalo182/wiki-gif.git HEAD:main
+      # - name: Commit and push updated version
+      #   run: |
+      #     git config --local user.name "GitHub Actions"
+      #     git config --local user.email "actions@github.com"
+      #     git add VERSION
+      #     git commit -m "Increment version to ${{ needs.versioning.outputs.version }}"
+      #     git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/fruetalo182/wiki-gif.git HEAD:main
