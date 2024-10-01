@@ -14,8 +14,6 @@ permissions:
 jobs:
   versioning:
     uses: fruetalo182/github-workflows-templates/.github/workflows/version-autoupdate-patch.yaml@main
-    outputs:
-      version: ${{ steps.versioning.outputs.version }}
 
   execute-lint:
     needs: versioning
