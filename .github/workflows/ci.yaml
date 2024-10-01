@@ -83,7 +83,7 @@ jobs:
 
       - name: Tag and Push semver image - Github Packages
         run: |
-          docker tag wiki-gif:${{ github.sha }} ghcr.io/fruetalo182/wiki-gif:${{ needs.versioning-ghcr.outputs.version }}
+          docker tag wiki-gif:latest ghcr.io/fruetalo182/wiki-gif:${{ needs.versioning-ghcr.outputs.version }}
           docker push ghcr.io/fruetalo182/wiki-gif:${{ needs.versioning-ghcr.outputs.version }}
 
   # DOCKER HUB  
